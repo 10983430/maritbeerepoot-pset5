@@ -1,6 +1,8 @@
 package com.example.marit.maritbeerepoot_pset5;
 
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
@@ -10,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +28,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -33,6 +39,8 @@ import java.util.Objects;
 public class MenuFragment extends ListFragment {
     public ArrayList<String> gerechten = new ArrayList<>();
     String category;
+    Map<String, String> map = new HashMap<String, String>();
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,11 +100,32 @@ public class MenuFragment extends ListFragment {
                 // Only get items with the wanted category
                 if (Objects.equals(cat.getJSONObject(i).getString("category"), category)) {
                     gerechten.add(cat.getJSONObject(i).getString("name"));
+                    // Add the item and the price to a dictionairy to access the price later
+                    map.put(cat.getJSONObject(i).getString("name"), cat.getJSONObject(i).getString("price"));
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return gerechten;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        RestoDatabase db;
+        db = RestoDatabase.getInstance(getContext());
+        String item = String.valueOf(l.getItemAtPosition(position));
+
+        // Create a toast to send a notification to the user
+        String toasttext = item + " has been added to your order";
+        Context context = getContext();
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, toasttext, duration);
+        toast.show();
+
+        // Get the price
+        double price = Double.parseDouble(map.get(item));
+        db.insert(item, price);
     }
 }

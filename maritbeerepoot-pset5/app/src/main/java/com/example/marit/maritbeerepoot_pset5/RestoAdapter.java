@@ -2,16 +2,11 @@ package com.example.marit.maritbeerepoot_pset5;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
-
-/**
- * Created by Marit on 28-11-2017.
- */
 
 public class RestoAdapter extends CursorAdapter {
     public RestoAdapter(Context context, Cursor cursor) {
@@ -28,11 +23,16 @@ public class RestoAdapter extends CursorAdapter {
         // Find view
         TextView textje = view.findViewById(R.id.textView2);
         TextView amountje = view.findViewById(R.id.textView);
+        TextView price = view.findViewById(R.id.textView3);
+
+        // Calculate the total price
+        Integer aantal = cursor.getInt(cursor.getColumnIndex("amount"));
+        Integer prijs = cursor.getInt(cursor.getColumnIndex("price"));
+        Integer total = aantal * prijs;
 
         // Show item
         textje.setText(cursor.getString(cursor.getColumnIndex("name")));
-        amountje.setText(cursor.getString(cursor.getColumnIndex("amount")));
-        Log.d("hiiiii", cursor.getString(cursor.getColumnIndex("name")));
-
+        amountje.setText(cursor.getString(cursor.getColumnIndex("amount"))+" x");
+        price.setText("$" + total.toString());
     }
 }

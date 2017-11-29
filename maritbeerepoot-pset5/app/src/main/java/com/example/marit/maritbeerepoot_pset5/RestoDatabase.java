@@ -5,15 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-/**
- * Created by Marit on 27-11-2017.
- */
 
 public class RestoDatabase extends SQLiteOpenHelper {
     private static RestoDatabase instance;
-    private static int version = 2;
+    private static int version = 3;
     private static String databasename = "resto";
 
 
@@ -47,17 +42,16 @@ public class RestoDatabase extends SQLiteOpenHelper {
 
     public void insert(String name, double price) {
         SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM resto WHERE name = '"+ name+ "'",null);
+        // Try to get information about the meal that is already in the database
+        Cursor cursor = db.rawQuery("SELECT * FROM resto WHERE name = '"+ name + "'",null);
         ContentValues values =  new ContentValues();
 
         // Check if item is in the database
-        if (cursor.getCount()>0){
-            Integer tempid = cursor.getColumnIndex("_id");
-            Integer tempamount = cursor.getColumnIndex("amount");
-            values.put("amount", tempamount + 1);
-            db.update("resto", values,"_id=" + tempid, null);
-            Integer newamount = tempamount + 1;
-            Log.d("lolhi", newamount.toString());
+        if (cursor != null && cursor.moveToFirst()){
+            Integer tempamount = cursor.getInt(cursor.getColumnIndex("amount"));
+            Integer newamount = 1 + tempamount;
+            values.put("amount", newamount);
+            db.update("resto", values,"name=?", new String[]{name});
         }
 
         // If not, add it to the database
@@ -68,18 +62,7 @@ public class RestoDatabase extends SQLiteOpenHelper {
             db.insert("resto",null, values);
         }
     }
-/*
-    public void update(long id, int box) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("completed", box);
-        db.update("resto", values, "_id=" + id, null);
-    }*/
 
-    public void delete(long id) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete("resto", "_id=" + id, null);
-    }
 
     public void clear() {
         SQLiteDatabase db = getWritableDatabase();

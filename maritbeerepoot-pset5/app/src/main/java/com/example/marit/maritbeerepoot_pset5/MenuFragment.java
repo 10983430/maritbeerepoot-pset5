@@ -1,13 +1,10 @@
 package com.example.marit.maritbeerepoot_pset5;
 
-
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,18 +72,20 @@ public class MenuFragment extends ListFragment {
             }
         });
         RQ.add(stringRequest);
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_categories, container, false);
+        setRetainInstance(true);
+        return view;
     }
 
     public void makelistview(ArrayList<String> info) {
         // Set the adapter
-        Log.d("list", info.toString());
         this.setListAdapter(new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, info));
     }
 

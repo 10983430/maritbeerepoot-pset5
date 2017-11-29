@@ -4,7 +4,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        // Put the first fragment in the window
         FragmentManager fm = getSupportFragmentManager();
         CategoriesFragment fragment = new CategoriesFragment();
         FragmentTransaction ft = fm.beginTransaction();
@@ -25,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Create the menu
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actions, menu);
         return super.onCreateOptionsMenu(menu);
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ordermenu:
-                Log.d("test", "test");
+                // Make it possible to show the order
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 OrderFragment fragment = new OrderFragment();
                 fragment.show(ft, "dialog");

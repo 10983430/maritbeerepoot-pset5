@@ -56,11 +56,17 @@ public class RestoDatabase extends SQLiteOpenHelper {
 
         // If not, add it to the database
         else {
-            values.put("name", name);
-            values.put("price", price);
-            values.put("amount", 1);
-            db.insert("resto",null, values);
+            addItem(name, price);
         }
+    }
+
+    public void addItem(String name, double price) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values =  new ContentValues();
+        values.put("name", name);
+        values.put("price", price);
+        values.put("amount", 1);
+        db.insert("resto",null, values);
     }
 
 

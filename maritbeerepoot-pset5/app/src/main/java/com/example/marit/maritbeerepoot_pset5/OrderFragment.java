@@ -33,6 +33,7 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
     Button clear;
     Button place;
     Integer totalprice = 0;
+    Cursor cursor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         // Put the information from the database in the listview
         ListView list = (ListView) view.findViewById(R.id.list);
         db = RestoDatabase.getInstance(getContext());
-        Cursor cursor = db.selectAll();
+        cursor = db.selectAll();
         adapter = new RestoAdapter(getContext(), cursor);
         list.setAdapter(adapter);
 
@@ -53,6 +54,18 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         clear.setOnClickListener(this);
         place.setOnClickListener(this);
 
+        // Set the total price of the order, when the order is not empty
+        totalprice();
+        TextView placeholder = view.findViewById(R.id.totaal);
+        if (totalprice!=0) {
+            placeholder.setText("Total price: $" + totalprice.toString());
+        }
+
+        setRetainInstance(true);
+        return view;
+    }
+
+    public void totalprice(){
         // Loop through the database to calculate the total price of an order
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -62,38 +75,37 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
             totalprice = totalprice + total;
             cursor.moveToNext();
         }
-
-        // Set the total price of the order, when the order is not empty
-        TextView placeholder = view.findViewById(R.id.totaal);
-        if (totalprice!=0){
-            placeholder.setText("Total price: $" + totalprice.toString());
-        }
-        setRetainInstance(true);
-        return view;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.clear:
-                // Clear the database and close the dialog window
-                db.clear();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.detach(this).attach(this).commit();
+                clear();
                 break;
-
             case R.id.order:
-                // When there are items in the order, place the order
-                if (totalprice!=0) {
-                    getData();
-                }
-                // Let the user know that you can't place an empty order
-                else{
-                    Context context = getContext();
-                    Toast.makeText(context, "You can't place an empty order!", Toast.LENGTH_LONG).show();
-                }
+                order();
                 break;
         }
+    }
+
+    public void order() {
+        // When there are items in the order, place the order
+        if (totalprice!=0) {
+            getData();
+        }
+        // Let the user know that you can't place an empty order
+        else{
+            Context context = getContext();
+            Toast.makeText(context, "You can't place an empty order!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void clear() {
+        // Clear the database and close the dialog window
+        db.clear();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     @Override

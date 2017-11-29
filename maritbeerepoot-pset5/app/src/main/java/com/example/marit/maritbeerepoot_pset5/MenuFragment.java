@@ -79,7 +79,7 @@ public class MenuFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_menu, container, false);
         setRetainInstance(true);
         return view;
     }

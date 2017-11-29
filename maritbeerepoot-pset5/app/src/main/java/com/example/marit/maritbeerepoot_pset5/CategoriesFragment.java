@@ -48,7 +48,6 @@ public class CategoriesFragment extends ListFragment {
                             // Catch exception when needed
                             e.printStackTrace();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -57,7 +56,6 @@ public class CategoriesFragment extends ListFragment {
                 error.printStackTrace();
             }
         });
-        setRetainInstance(true);
         RQ.add(stringRequest);
     }
 

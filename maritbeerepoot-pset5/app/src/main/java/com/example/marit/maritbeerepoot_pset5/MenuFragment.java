@@ -58,7 +58,7 @@ public class MenuFragment extends ListFragment {
                     public void onResponse(String response) {
                         try {
                             // Parse JSON to arraylist
-                            makelistview(getTextJSON(response));
+                            makelistmenu(getTextJSON(response));
                         } catch (JSONException e) {
                             // Catch exception when needed
                             e.printStackTrace();
@@ -84,7 +84,7 @@ public class MenuFragment extends ListFragment {
         return view;
     }
 
-    public void makelistview(ArrayList<String> info) {
+    public void makelistmenu(ArrayList<String> info) {
         // Set the adapter
         this.setListAdapter(new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, info));
     }

@@ -5,3 +5,6 @@ Bij deze applicatie was het de bedoeling om de Restaurant applicatie, gemaakt in
 
 
 ![screenshot](/doc/Screen.png)
+
+
+[![BCH compliance](https://bettercodehub.com/edge/badge/10983430/maritbeerepoot-pset5?branch=master)](https://bettercodehub.com/)
